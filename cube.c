@@ -101,14 +101,14 @@ void plane_bounce(int axis, int delay) {
 
     for (i=7; i >= 0; i--) {
         set_plane(axis, i, 3);
-        //set_plane(axis, prev_1, 2);
-        //set_plane(axis, prev_2, 1);
+        set_plane(axis, prev_1, 2);
+        set_plane(axis, prev_2, 1);
         set_plane(axis, prev_3, 0);
 
         prev_3 = i;
-        //prev_3 = prev_2;
-        //prev_2 = prev_1;
-        //prev_1 = i;
+        prev_3 = prev_2;
+        prev_2 = prev_1;
+        prev_1 = i;
         delay_ms(delay);
     }
 }
@@ -201,8 +201,8 @@ void * cube_main(void * arg) {
      */
 
     while(1) {
-        cube_dance(100);
-        //plane_bounce(X_AXIS, 20);
+        //cube_dance(100);
+        plane_bounce(X_AXIS, 20);
         //sine_wave(100);
     }
 

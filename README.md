@@ -9,8 +9,18 @@ Run `make` to compile, run ./main to run simulation.
 This repository is currently only for technites kids to use.
 I'm sure the code is of no use to anyone else.
 
+**Setup**
+
+On ubuntu, do
+
+`apt-get install freeglut3 freeglut3-dev glutg3 glutg3-dev`
+
+Optionally, install glut documentation:
+
+`apt-get install glut-doc`
+
 TODO
-====
+----
 
 Effects:
 * Sine wave
