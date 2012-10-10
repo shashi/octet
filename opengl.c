@@ -30,7 +30,6 @@ double rotate_x=0;
 void display(){
 
   int x, y, z, lvl;
-  float color;
 
   GLfloat LightAmbient[] = { 0.8, 0.0, 0.0, 1.0 };  /* reddish ambient light  */
   GLfloat LightDiffuse[] = { 0.1, 0.1, 0.9, 1.0 };  /* bluish  diffuse light. */
@@ -57,27 +56,28 @@ void display(){
   // Other Transformations
   // glScalef( 2.0, 2.0, 0.0 );          // Not included
   glPointSize(10.0); // 10 pixel dot!
-  setvoxel(0, 0, 0, 3);
-  setvoxel(1, 0, 0, 2);
  
-  glBegin(GL_POINTS);
   //Multi-colored side - FRONT
+  //set_plane(X_AXIS, 0, 3);
+  //set_plane(Z_AXIS, 3, 3);
+
   for(x=0; x < 8; x++) {
     for(y=0; y < 8; y++) {
       for(z=0; z < 8; z++) {
-          lvl = getvoxel(x, y, z);
+          lvl = get_led(x, y, z);
           glPushMatrix();
           glTranslatef(SPACING * (x - 4), SPACING * (y - 4), -SPACING * (z - 4));
-          glutSolidSphere(0.03, 4, 4);
+          if (lvl > 0) {
+              glColor3f(lvl / 3.0, 0, 0);
+              glutSolidCube(0.03);
+          }
           glPopMatrix();
       }
     }
   }
-  glEnd();
-    
   glFlush();
   glutSwapBuffers();
- 
+
 }
  
 // ----------------------------------------------------------
@@ -107,11 +107,8 @@ void specialKeys( int key, int x, int y ) {
 // ----------------------------------------------------------
 // main() function
 // ----------------------------------------------------------
-int openGLInit(int argc, char* argv[]){
+void * opengl_init(void * arg){
 
-  //  Initialize GLUT and process user parameters
-  glutInit(&argc,argv);
- 
   //  Request double buffered true color window with Z-buffer
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
  
@@ -123,9 +120,10 @@ int openGLInit(int argc, char* argv[]){
   glEnable(GL_DEPTH_TEST);
   // Callback functions
   glutDisplayFunc(display);
+  glutIdleFunc(display);
   glutSpecialFunc(specialKeys);
  
   //  Pass control to GLUT for events
   glutMainLoop();
- 
+  return NULL;
 }
