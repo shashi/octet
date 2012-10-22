@@ -12,8 +12,7 @@
 
 #define delay_ms(x) usleep((x) * 1000)
 
-char cube[8][8][8];
-
+/*
 void set_led(int x, int y, int z, int level) {
     cube[x][y][z] = level;
 }
@@ -21,26 +20,28 @@ void set_led(int x, int y, int z, int level) {
 int get_led(int x, int y, int z) {
     return cube[x][y][z];
 }
-/*
+*/
+
 #define CUBE_SIZE 8
 #define BITS_PER_LED 2
-#define Z_MAX CUBE_SIZE * BITS_PER_LED / sizeof(char)
+#define Z_MAX 2
 
 char cube[CUBE_SIZE][CUBE_SIZE][Z_MAX];
 
 void set_led(int x, int y, int z, int level) {
     // special case here
-    int k = (z >> 2) & 1, bits_pos = (z & 3) << 1;
-
-    cube[x][y][k] |= 3 << bits_pos;
-    cube[x][y][k] &= level << bits_pos;
+    int k = (z >> 2) & 1, bit_pos = (z & 3) << 1;
+    char removed_bits, tmp;
+    removed_bits = 0xFF ^ (3 << bit_pos);
+    tmp = cube[x][y][k];
+    tmp &= removed_bits;
+    cube[x][y][k] = tmp | (level << bit_pos);
 }
 
 int get_led(int x, int y, int z) {
     int k = (z >> 2) & 1, bit_pos = (z & 3) << 1;
     return (cube[x][y][k] >> bit_pos) & 3;
 }
-*/
 
 // XXX: remove this.
 void print_cube() {
@@ -127,7 +128,7 @@ void sine_wave(int delay) {
         for (x=0; x < 8; x++) {
             for (y=0; y < 8; y++) {
                 angle = 3.14 / 4 * i / 7.0 * (sqrt(pow(x-3.5, 2) + pow(y - 3.5, 2)) / 3.5 * sqrt(2));
-                z = round((8) * sin(angle)) + i;
+                z = round(8 * sin(angle));
                 set_led(x, y, z, 3);
             }
         }
@@ -139,7 +140,7 @@ void sine_wave(int delay) {
         for (x=0; x < 8; x++) {
             for (y=0; y < 8; y++) {
                 angle = 3.14 / 4 * i / 7.0 * (sqrt(pow(x-3.5, 2) + pow(y - 3.5, 2)) / 3.5 * sqrt(2));
-                z = round(8*sin(angle)) + 7 - i;
+                z = round(8*sin(angle));
                 set_led(x, y, z, 3);
             }
         }
@@ -170,8 +171,8 @@ void wireframe_cube(int x, int y, int z, int edge, int level) {
 }
 
 void cube_dance(int delay) {
-    int i;
-    for(i=0; i< 8; i++) {
+    int i, k;
+    for(i=0; i<8; i++) {
         wireframe_cube(0, 0, 0, i, 3);
         delay_ms(delay);
         wireframe_cube(0, 0, 0, i, 0);
@@ -182,6 +183,10 @@ void cube_dance(int delay) {
         delay_ms(delay);
         wireframe_cube(i, i, i, 8 - i, 0);
     }
+}
+
+void call_function(char f, char args[5]) {
+    // call cube functions
 }
 
 void * cube_main(void * arg) {
@@ -200,12 +205,10 @@ void * cube_main(void * arg) {
      * will occur without any porting whatsoever.
      */
 
+    int i,j,k; 
     while(1) {
-        //cube_dance(100);
-        plane_bounce(X_AXIS, 20);
-        //sine_wave(100);
+        sine_wave(50);
     }
-
     return NULL;
 }
 

@@ -1,4 +1,5 @@
 #include <msp430F1611.h>
+#include "cube.h"
 /*------]]]]-------------------------------------------
                         MSP430G2553
                       -----------------
@@ -25,12 +26,12 @@
   -------------------------------------------------*/
 
 
-#define SIN        BIT7
-#define GSCLK 	   BIT4
-#define XLAT       BIT6
-#define BLANK 	   BIT3
-#define SCLK  	   BIT5
-#define TX 	  	   BIT2	
+#define SIN       BIT7
+#define GSCLK 	  BIT4
+#define XLAT      BIT6
+#define BLANK 	  BIT3
+#define SCLK  	  BIT5
+#define TX        BIT2	
 
 #define SIN595    BIT0
 #define SCLK595   BIT1
@@ -96,18 +97,9 @@ void main(void)
     rx_temp=0;
     flag=0;	 
 
-	for(j=0;j<N_layer;++j)
-		for(i=0;i<arr_collsize;++i)
-				   {disp_arr[j][i][0]=0xFF;
-					disp_arr[j][i][1]=0xAA;
-					disp_arr[j][i][2]=0x55;
-					disp_arr[j][i][3]=0x00;
-					disp_arr[j][i][4]=0xFF;
-					disp_arr[j][i][5]=0xAA;
-					disp_arr[j][i][6]=0x55;
-					disp_arr[j][i][7]=0x00;
-					
-}
+	for(j=0;j<N_layer;++j) {
+        set_plane(Z_AXIS, j, j % 4);
+    }
 
 	P1DIR=0xFF;
 	P1OUT=0xFF;
@@ -119,7 +111,6 @@ void main(void)
 
 
     //Shift 595 initialization
-    P2DIR |= (SIN595 + SCLK595 + LTCH595);
     P2OUT = 0;
     //UART
 
@@ -149,6 +140,10 @@ void main(void)
         P1OUT=~(1<<layer_no);
      }
 //PUT MODS HERE
+    fill_cube(0xFF);
+    // 1. Check if START_SENTINAL was encountered
+    // 2. next char is the function name
+    // 3. next 5 are function arguments
     /*
     if(strobe=='D')
         	{
@@ -191,7 +186,7 @@ void SendData(char layer)
     for(col_no=0;col_no<8;++col_no)
     for (i = 0; i < N_row; i++)
     {   // Send data for each channel, CH15 first
-        temp=((disp_arr[layer][col_no>>2][i])<<((col_no&0x03)<<1));
+        temp=get_led(layer, col_no, i) << 6;
     	P2OUT&=~(SIN);
   		P2OUT|=SCLK;		//11
 		P2OUT&=~(SCLK);
@@ -284,5 +279,5 @@ void recieve()
 __interrupt void usart1_rx (void)
 { flag=0;
   stat_read=RXBUF1;
-  __bic_SR_register_on_exit(CPUOFF);
+  //__bic_SR_register_on_exit(CPUOFF);
  }

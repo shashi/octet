@@ -7,7 +7,7 @@
 CC=g++
 CFLAGS=-c -Wall -I.
 LDFLAGS=-lGL -lglut -lGLU -lpthread -I.
-SOURCES=$(wildcard *[^main].c)
+SOURCES=cube.c opengl.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=main
 
