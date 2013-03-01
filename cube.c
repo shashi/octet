@@ -205,9 +205,11 @@ void * cube_main(void * arg) {
      * will occur without any porting whatsoever.
      */
 
-    int i,j,k; 
+    int i,j,k;
     while(1) {
-        sine_wave(50);
+        /*sine_wave(50);*/
+        /*cube_static(50);*/
+        cube_dance(50);
     }
     return NULL;
 }
