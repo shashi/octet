@@ -13,7 +13,7 @@ I'm sure the code is of no use to anyone else.
 
 On Ubuntu (11.04 or greater), run
 
-`apt-get install freeglut3 freeglut3-dev binutils-gold
+`apt-get install freeglut3 freeglut3-dev binutils-gold`
 
 Optionally, install glut documentation:
 
