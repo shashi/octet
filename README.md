@@ -11,9 +11,9 @@ I'm sure the code is of no use to anyone else.
 
 **Setup**
 
-On ubuntu, do
+On Ubuntu (11.04 or greater), run
 
-`apt-get install freeglut3 freeglut3-dev glutg3 glutg3-dev`
+`apt-get install freeglut3 freeglut3-dev binutils-gold
 
 Optionally, install glut documentation:
 

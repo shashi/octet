@@ -23,6 +23,9 @@
                      |                 |
         latch_595 <--|P2.2         P2.3|<-- Button4           
                       -----------------
+
+	@author Pavan K. Shetty, le god
+	@author Shashi Gowda
   -------------------------------------------------*/
 
 

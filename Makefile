@@ -4,9 +4,9 @@
 # this only compiles modified files when rerun
 #
 
-CC=g++
+CC=gcc
 CFLAGS=-c -Wall -I.
-LDFLAGS=-lGL -lglut -lGLU -lpthread -I.
+LDFLAGS=-lGL -lglut -lGLU -lpthread -lm -I.
 SOURCES=cube.c opengl.c
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=main
